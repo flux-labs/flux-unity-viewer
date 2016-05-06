@@ -1,0 +1,31 @@
+<!--
+This page provides an interface for collecting a handful of data keys together
+and sharing them as a URL.
+-->
+<% include common-template %>
+<body class="template">
+  <% include unity-webgl-template %>
+
+  <!-- Flux Data Selector UI injection target and components -->
+  <div class="ui raised segment display-on-load">
+    <div id="flux-data-selector"></div>
+  </div>
+  <script type="text/javascript" src="flux-data-selector/flux-data-selector-ui.js"></script>
+  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="scripts/semantic.min.css">
+  <script type="text/javascript" src="scripts/semantic.min.js"></script>
+  <script>
+    (function(context) {
+      // Activates the Flux Data Selector UI.
+      FluxDataSelectorUI(ds, 'flux-data-selector');
+    })(window);
+  </script>
+
+  <!-- This is loaded after the UI to overwrite the onValue callback -->
+  <% include on-value-callback %>
+  <style>
+    body { background-color: #eef; }
+  </style>
+
+</body>
+

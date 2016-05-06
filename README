@@ -1,0 +1,47 @@
+# Unity-Flux Example Project
+
+## User information
+
+### Controls
+
+  * WASD or arrow keys to move around
+  * Move mouse or trackpad to look around (after clicking "use mouse")
+  * Space to jump — you can keep jumping in the air to get higher
+  * Click the left mouse button to shoot a frisbee
+
+## Developer information
+
+### Getting started
+
+Whether you're on mac, windows, or linux, you can get started by installing
+node.js and then running this command:
+
+    $ node server.js
+
+### Launching the unity project
+
+Install Unity, then open the "unity-project" folder as a project in unity.
+You can edit things inside the unity editor and they will show up in the webgl
+application after you rebuild the unity files.
+
+To rebuild the unity files in the webgl client, select: File > Build settings...
+and then click "Build." Select the "unity-build-target" folder, replacing the
+folder 'webgl.' The .ejs templates in views/ will automatically load your new
+version of the unity project.
+
+### Dependency on flux-data-selector
+
+This app uses another Flux Labs project for its UI, the wonderful
+Flux-Data-Selector project. If you go into that folder, you can pull from its
+git repository and get the latest features as they develop.
+
+### Unity to the Browser -- and back
+
+Unity can call functions in the global scope with the following syntax:
+
+    Application.ExternalCall ("Loaded", "Loaded!"); // "Loaded!" is the argument
+
+The browser can call functions on specific objects in Unity, too:
+
+    SendMessage("player", "Jump", 5); // Calls the "Jump" method on every class.
+                                      // Accepts floats and strings. Very slow.

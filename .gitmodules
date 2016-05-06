@@ -1,0 +1,3 @@
+[submodule "flux-data-selector"]
+	path = flux-data-selector
+	url = https://github.com/flux-labs/flux-data-selector.git
