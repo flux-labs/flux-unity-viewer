@@ -13,9 +13,9 @@
 
 ### Getting started
 
-Whether you're on mac, windows, or linux, you can get started by installing
-node.js and then running this command:
-
+Whether you're on mac, windows, or linux, the steps should be the same:
+    1. install node.js
+    2. run `npm install` inside this directory
     $ node server.js
 
 ### Launching the unity project
@@ -29,19 +29,12 @@ and then click "Build." Select the "unity-build-target" folder, replacing the
 folder 'webgl.' The .ejs templates in views/ will automatically load your new
 version of the unity project.
 
-### Dependency on flux-data-selector
+### More features
 
-This app uses another Flux Labs project for its UI, the wonderful
-Flux-Data-Selector project. If you go into that folder, you can pull from its
-git repository and get the latest features as they develop.
+* If you want to see tooltips on an element, you can change the script to use
+the CreateGeometryAndBimInfo method instead of CreateGeometry. This method
+takes a flux data key in the shape of an array with two items, the first being
+the geometry and the second being your bim data.
 
-### Unity to the Browser -- and back
-
-Unity can call functions in the global scope with the following syntax:
-
-    Application.ExternalCall ("Loaded", "Loaded!"); // "Loaded!" is the argument
-
-The browser can call functions on specific objects in Unity, too:
-
-    SendMessage("player", "Jump", 5); // Calls the "Jump" method on every class.
-                                      // Accepts floats and strings. Very slow.
+* If you want to shoot frisbees, change the static variable
+PlayerController.FrisbeesOff to false.

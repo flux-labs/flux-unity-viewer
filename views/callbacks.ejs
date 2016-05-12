@@ -1,0 +1,19 @@
+<script>
+  ds.setOnValue(function(valuePromise) {
+    window.keyListModule.LoadingMessage.style.display = "block";
+    window.keyListModule.LoadingMessage.textContent = "Loading geometry...";
+    valuePromise.then(window.keyListModule.LoadDataKey);
+  });
+  ds.selectProject = (function(){
+    // Copy the old projects promise callback so we can still call it while
+    // adding some extra functionality.
+    var oldSelectProjectCallback = ds.selectProject;
+    console.log(1);
+    return function(projectId) {
+      console.log(2);
+      console.log(projectId);
+      window.keyListModule.ResetKeyList();
+      oldSelectProjectCallback.call(ds, projectId);
+    };
+  })();
+</script>

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
@@ -35,18 +36,22 @@ public class PlayerController : MonoBehaviour {
 
 	GameObject monoCam;
 	GameObject stereoCam;
-	GameObject crosshairPair;
-	GameObject crosshairSingle;
+	Image crosshairLeft;
+	Image crosshairRight;
+	Image crosshairSingle;
 
 	public BimInfoCanvas bimfo;
+
+	public static bool FrisbeesOff = true;
 
 	bool allowMouseAndWASDMovement;
 
 	void Start() {
 		monoCam = GameObject.Find ("Monoscopic main camera");
 		stereoCam = GameObject.Find ("Stereoscopic main camera");
-		crosshairPair = GameObject.Find ("crosshairs parent");
-		crosshairSingle = GameObject.Find ("crosshairs center");
+		crosshairLeft = GameObject.Find ("crosshairs left").GetComponent<Image>();
+		crosshairRight = GameObject.Find ("crosshairs right").GetComponent<Image>();
+		crosshairSingle = GameObject.Find ("crosshairs center").GetComponent<Image>();
 
 		calibrateCamera ();
 		rigid = gameObject.GetComponent<Rigidbody> ();
@@ -60,9 +65,10 @@ public class PlayerController : MonoBehaviour {
 	void calibrateCamera() {
 		cameraTransform = StereoscopicVision ? stereoCam.transform : monoCam.transform;
 		monoCam.SetActive (!StereoscopicVision);
-		crosshairSingle.SetActive (!StereoscopicVision);
+		crosshairSingle.enabled = (!StereoscopicVision);
 		stereoCam.SetActive (StereoscopicVision);
-		crosshairPair.SetActive (StereoscopicVision);
+		crosshairLeft.enabled = (StereoscopicVision);
+		crosshairRight.enabled = (StereoscopicVision);
 	}
 
 	public void SwitchCameraMode() {
@@ -169,15 +175,12 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void ShootFrisbee() {
-		// Vector3 start = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-		// start += transform.forward.normalized / 2;
+		if (FrisbeesOff) return;
 		GameObject frisbeeObj = (GameObject)Instantiate (frisbee, cameraTransform.position + cameraTransform.forward, Quaternion.identity);
 
 		frisbeeObj.GetComponent<Rigidbody> ().velocity = cameraTransform.forward * 20;
 
 		frisbeeObj.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, -10000, 0);
-
-		frisbeeObj.GetComponent<BimData> ().bimInfo = "This is a frisbee with our gorgeous logo";
 	}
 
 	public void Jump() {

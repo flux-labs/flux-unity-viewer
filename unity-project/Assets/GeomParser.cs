@@ -24,35 +24,25 @@ public class GeomParser : MonoBehaviour {
 	public float MaxSize = 1;
 	bool smallestCoordsUnset;
 
+	public static bool repositioningGeometry = false;
+
 	public void MakeGeometry(JSONObject unknownJson) {
 		mesh = gameObject.GetComponent<MeshFilter> ().mesh;
-
-//		if ((json.Substring(0, 1) != "{") && (json.Substring(0, 1) != "[")) {
-//			mesh = new Mesh();
-//			gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
-//			gameObject.GetComponent<MeshRenderer>().material = null;
-//			gameObject.GetComponent<MeshFilter> ().mesh = null;
-//			print ("Your Flux data is in the wrong format.");
-//			print (json.Substring (0, 100));
-//			return;
-//		} 
-//		json = json.Replace ("\n", "");
-
-//		JSONObject unknownJson = new JSONObject(json);
 
 		vertices = new List<Vector3> (); 
 		triangles = new List<int> ();
 
-		// Sets smallest coordinates, largest coordinates and max edge size of mesh.
-		smallestCoordsUnset = true;
-		RecursiveGeometrySizingPass (unknownJson);
+		// If the user wishes to reposition the geometry close to them,
+		// we have to check what the smallest X, Y and Z values are.
+		smallestCoordsUnset = !repositioningGeometry;
+		if (repositioningGeometry) {
+			RecursiveGeometrySizingPass (unknownJson);
+			maximumEdgeSize = largestX - smallestX;
+			maximumEdgeSize = (maximumEdgeSize < (largestY - smallestY)) ? largestY - smallestY : maximumEdgeSize;
+			maximumEdgeSize = (maximumEdgeSize < (largestZ - smallestZ)) ? largestZ - smallestZ : maximumEdgeSize;
+		}
 
-		// Set the largest edge size of this mesh.
-		maximumEdgeSize = largestX - smallestX;
-		maximumEdgeSize = (maximumEdgeSize < (largestY - smallestY)) ? largestY - smallestY : maximumEdgeSize;
-		maximumEdgeSize = (maximumEdgeSize < (largestZ - smallestZ)) ? largestZ - smallestZ : maximumEdgeSize;
-
-		// Actually attach geometry to your 
+		// Records geometry to vertices and triangles lists.
 		RecursiveGeometryRecord (unknownJson);
 
 		// Creating an array and assigning mesh.vertices to it is 
@@ -140,17 +130,18 @@ public class GeomParser : MonoBehaviour {
 
 					float multiplier = .06f;
 					multiplier *= MaxSize;
-
-					vertices.Add (new Vector3 (
-						vertex.list [0].n * multiplier,
-						vertex.list [1].n * multiplier,
-						vertex.list [2].n * multiplier));
-//						((vertex.list [0].n) * MaxSize ) / maximumEdgeSize - smallestX, 
-//						((vertex.list [0].n) * MaxSize ) / maximumEdgeSize, 
-//						((vertex.list [1].n) * MaxSize ) / maximumEdgeSize - smallestY, 
-//						((vertex.list [1].n) * MaxSize ) / maximumEdgeSize, 
-//						((vertex.list [2].n) * MaxSize ) / maximumEdgeSize - smallestZ));
-//						((vertex.list [2].n) * MaxSize ) / maximumEdgeSize));
+						
+					if (repositioningGeometry) {
+						vertices.Add (new Vector3 (
+							((vertex.list [0].n) * multiplier) / maximumEdgeSize - smallestX, 
+							((vertex.list [1].n) * multiplier) / maximumEdgeSize - smallestY, 
+							((vertex.list [2].n) * multiplier) / maximumEdgeSize - smallestZ));
+					} else {
+						vertices.Add (new Vector3 (
+							vertex.list [0].n * multiplier,
+							vertex.list [1].n * multiplier,
+							vertex.list [2].n * multiplier));
+					}
 				}       
 			}
 		}
@@ -188,5 +179,9 @@ public class GeomParser : MonoBehaviour {
 				}       
 			}
 		}
+	}
+
+	public void SwitchRepositioning() {
+		repositioningGeometry = !repositioningGeometry;
 	}
 }

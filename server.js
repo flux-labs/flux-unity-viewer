@@ -6,24 +6,22 @@ app.set('port', (process.env.PORT || 8091));
 // Views is the default directory for all template files
 app.set('view engine', 'ejs');
 
-app.use(/(\/constructor\/)?\/Release/,
-    express.static(__dirname + '/unity-build-target/webgl/Release'));
-app.use(/(\/constructor\/)?\/TemplateData/,
-    express.static(__dirname + '/unity-build-target/webgl/TemplateData'));
-app.use(/(\/constructor\/)?\/scripts/,
-    express.static(__dirname + '/client-scripts'));
-app.use(/(\/constructor\/)?\/flux-data-selector/,
-    express.static(__dirname + '/flux-data-selector'));
-
-app.get('/', function(req, res) {
-  res.render('viewport-constructor');
-});
-app.get('/:extra', function(req, res) {
-  console.log(req.params.extra);
+app.get('/view/', function(req, res) {
   res.render('viewport-simple-viewer');
 });
-app.get('/constructor/:extra', function(req, res) {
-  console.log(req.params.extra);
+
+app.use(/(\/view)?\/Release/,
+    express.static(__dirname + '/unity-build-target/webgl/Release'));
+app.use(/(\/view)?\/TemplateData/,
+    express.static(__dirname + '/unity-build-target/webgl/TemplateData'));
+app.use(/(\/view)?\/scripts/,
+    express.static(__dirname + '/client-scripts'));
+app.use(/(\/view)?\/flux-data-selector/,
+    express.static(__dirname + '/flux-data-selector'));
+app.use(/(\/view)?\/flux-sdk-js/,
+    express.static(__dirname + '/node_modules/flux-sdk-browser/dist/'));
+
+app.get('/', function(req, res) {
   res.render('viewport-constructor');
 });
 

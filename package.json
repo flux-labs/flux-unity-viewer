@@ -1,5 +1,5 @@
 {
-  "name": "unity-demo",
+  "name": "unity-flux-demo",
   "version": "0.1.0",
   "description": "unity flux demo",
   "engines": {
@@ -8,7 +8,8 @@
   "main": "server.js",
   "dependencies": {
     "ejs": "^2.4.1",
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "flux-sdk-browser": "^0.3.0"
   },
   "devDependencies": {},
   "scripts": {

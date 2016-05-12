@@ -1,7 +1,0 @@
-<script>
-ds.setOnValue(function(valuePromise) {
-      window.keyListModule.loadingMessage.style.display = "block";
-      window.keyListModule.loadingMessage.textContent = "Loading geometry...";
-      valuePromise.then(window.keyListModule.loadDataKey);
-    });
-</script>
