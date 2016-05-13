@@ -14,10 +14,10 @@ app.use(/(\/view)?\/Release/,
     express.static(__dirname + '/unity-build-target/webgl/Release'));
 app.use(/(\/view)?\/TemplateData/,
     express.static(__dirname + '/unity-build-target/webgl/TemplateData'));
-app.use(/(\/view)?\/scripts/,
-    express.static(__dirname + '/client-scripts'));
 app.use(/(\/view)?\/flux-data-selector/,
     express.static(__dirname + '/flux-data-selector'));
+app.use(/(\/view)?\/public/,
+    express.static(__dirname + '/public'));
 app.use(/(\/view)?\/flux-sdk-js/,
     express.static(__dirname + '/node_modules/flux-sdk-browser/dist/'));
 
@@ -26,6 +26,6 @@ app.get('/', function(req, res) {
 });
 
 app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+  console.log('Navigate to localhost:' + app.get('port'));
 });
 

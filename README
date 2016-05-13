@@ -9,6 +9,11 @@
   * Space to jump — you can keep jumping in the air to get higher
   * Click the left mouse button to shoot a frisbee
 
+### Options
+
+  * If your loaded geometry is too large, you can change the size it is rendered
+  at by changing the 'size' field.
+
 ## Developer information
 
 ### Getting started

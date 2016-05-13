@@ -169,7 +169,6 @@ public class PlayerController : MonoBehaviour {
 		if (Physics.Raycast (ray, out hit)) {
 			BimData b = hit.collider.gameObject.GetComponent<BimData> ();
 			if (b != null) bimfo.SetText (b.GetBimData());
-			else print ("didnt have bim data.");
 				
 		} else bimfo.SetText ("");
 	}
@@ -194,5 +193,9 @@ public class PlayerController : MonoBehaviour {
 
 	public void MoveMouseY(float movement) {
 		inputY = movement;
+	}
+
+	public void ToggleFrisbees() {
+		FrisbeesOff = !FrisbeesOff;
 	}
 }

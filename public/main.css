@@ -1,0 +1,152 @@
+.display-on-load {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.flex.space-between {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+.flex.vertical {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.flexbox-section {
+  width: 50%;
+  padding: .5em;
+}
+
+/* Select project message */
+.select-project-message,
+.arrow-pointing-down {
+  position: absolute;
+  background-color: #dff;
+  border-radius: 10px;
+}
+.select-project-message {
+  bottom: 110%;
+  padding: 2em;
+}
+.arrow-pointing-down {
+  position: absolute;
+  padding: 1em;
+  bottom: -25%;
+}
+
+/* Controls */
+.loading-message {
+  font-size: 1em;
+  line-height: 1.2em;
+}
+.under-viewport-controls {
+  background: linear-gradient(0deg, white, #eee);
+  font-size: 1.5em;
+  position: absolute;
+  top: 50%;
+  height: 5%;
+  width: 100%;
+}
+.under-viewport-controls button img {
+  width: 1em;
+  height: 1em;
+}
+.switch-camera-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.fullscreen-not-unity {
+  position: absolute;
+  left: calc(50% + 1em);
+}
+.frisbee-button {
+  position: absolute;
+  right: calc(50% + 1em);
+}
+
+.geometry-size {
+  float: right;
+  width: 10em;
+  font-size: 1em;
+  height: 1.3em;
+}
+.sharable-url {
+  font-size: 1em;
+}
+
+/* Content (below controls) */
+.content {
+  font-size: 1.5em;
+  padding: .5em;
+  position: absolute;
+  top: 55%;
+  height: 45%;
+}
+li {
+  border-radius: .5em;
+  padding: 1em;
+  font-size: 1em;
+}
+li:hover {
+  background-color: #aaa;
+}
+button {
+  padding: .1em;
+  border: 0;
+  background-color: initial;
+}
+
+/* Override Unity css */
+div.template-wrap {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  transform: initial;
+  border-bottom: 1px solid grey;
+  background-color: #4d4d4d;
+}
+#canvas {
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  -moz-box-shadow: none;
+}
+.fullscreen {
+  display: none;
+}
+
+/* Override Semantic css */
+.ui.raised.segment {
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.flux-data-selector {
+  position: relative;
+}
+.ui.dropdown .menu .selected.item, .ui.dropdown.selected {
+  font-weight: bold;
+}

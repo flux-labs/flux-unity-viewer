@@ -1,19 +1,21 @@
 <script>
+
+  // Shows the loading message, changes its text, and loads a data key.
   ds.setOnValue(function(valuePromise) {
-    window.keyListModule.LoadingMessage.style.display = "block";
-    window.keyListModule.LoadingMessage.textContent = "Loading geometry...";
+    document.querySelector('.sharable-url').style.display = 'none';
+    document.querySelector('.loading-message').style.display = "block";
+    document.querySelector('.loading-message').textContent = "Loading geometry...";
     valuePromise.then(window.keyListModule.LoadDataKey);
   });
+
+  // Copy the old projects promise callback so we can still call it while
+  // adding some extra functionality.
   ds.selectProject = (function(){
-    // Copy the old projects promise callback so we can still call it while
-    // adding some extra functionality.
     var oldSelectProjectCallback = ds.selectProject;
-    console.log(1);
     return function(projectId) {
-      console.log(2);
-      console.log(projectId);
       window.keyListModule.ResetKeyList();
       oldSelectProjectCallback.call(ds, projectId);
     };
   })();
+
 </script>
