@@ -33,12 +33,12 @@
     <button class="fullscreen-not-unity">
       <img src="/public/fullscreen.png">
     </button>
-    <button class="frisbee-button">
+    <button class="frisbee-button" style="display:none;">
       <img src="/public/disc.png">
     </button>
   </div>
   <div class="display-on-load flexbox-section">
-    <input class="geometry-size size-input" placeholder="Geometry size"></input>
+    <!-- <input class="geometry-size size-input" playeraceholder="Geometry size"></input> -->
   </div>
 </div>
 
@@ -182,6 +182,8 @@
         // $('.projects-selection-dropdown > div.menu')
         //   .append('<div class="item" data-value=' + proj +'>'+proj+'</div>');
         context.ds.selectProject(proj);
+      } else {
+        context.ds.selectExample("thomas' building");
       }
 
       var noMatches = true, regex = /[?&](key)=([\d\w]*)/g, result;
@@ -231,20 +233,21 @@
     })());
 
     // Sets the size of loaded geometry in the Unity context.
-    function sizeInputHandler(e) {
-      if (typeof e.target.value !== "number") return;
-      SendMessage("flux", "SetSize", parseFloat(e.target.value));
+    // Currently hidden due to a bug.
+    // function sizeInputHandler(e) {
+    //   if (/[^\d]/.exec(e.target.value)) return;
+    //   SendMessage("flux", "SetSize", parseFloat(e.target.value));
 
-      var input = document.querySelector('.size-input');
-      while (input.firstChild) {
-        input.removeChild(input.firstChild);
-      }
-      var sizeChangedMessage = document.createElement('p');
-      sizeChangedMessage.textContent = "Changed size to " + e.target.value;
-      document.body.appendChild(sizeChangedMessage);
-    }
-    document.querySelector('.size-input')
-    .addEventListener('change', sizeInputHandler);
+    //   var input = document.querySelector('.size-input');
+    //   while (input.firstChild) {
+    //     input.removeChild(input.firstChild);
+    //   }
+    //   var sizeChangedMessage = document.createElement('p');
+    //   sizeChangedMessage.textContent = "Changed size to " + e.target.value;
+    //   // append this somewhere
+    // }
+    // document.querySelector('.size-input')
+    // .addEventListener('change', sizeInputHandler);
 
     // Enter fullscreen mode
     document.querySelector('.fullscreen-not-unity')
@@ -252,11 +255,12 @@
       SetFullscreen(1);
     });
 
-    // Allow frisbee throwing
-    document.querySelector('.frisbee-button')
-    .addEventListener('click', function() {
-      SendMessage("player", "ToggleFrisbees");
-    });
+    // Allow frisbee throwing.
+    // Currently hidden because it's pointless
+    // document.querySelector('.frisbee-button')
+    // .addEventListener('click', function() {
+    //   SendMessage("player", "ToggleFrisbees");
+    // });
 
   })(window);
 </script>

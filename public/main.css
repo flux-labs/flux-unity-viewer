@@ -70,7 +70,7 @@
   width: 1em;
   height: 1em;
 }
-.switch-camera-button {
+.frisbee-button {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -79,7 +79,7 @@
   position: absolute;
   left: calc(50% + 1em);
 }
-.frisbee-button {
+.switch-camera-button {
   position: absolute;
   right: calc(50% + 1em);
 }

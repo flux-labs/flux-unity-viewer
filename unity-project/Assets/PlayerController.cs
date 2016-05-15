@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour {
 				lastButtonClickMobile = Time.time;
 			}
 		} else {
-			if (buttonAlreadyClicked && (Time.time - .3f < lastButtonClickMobile)) {
+			if (buttonAlreadyClicked && (Time.time - .15f < lastButtonClickMobile)) {
 				// If the screen was touched and released before .3 seconds, jump and shoot a frisbee.
 				Jump ();
 				ShootFrisbee ();

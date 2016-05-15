@@ -42,7 +42,7 @@ public class ModelManager : MonoBehaviour {
 	}
 
 	// Delete an element with a specific name.
-	// Checks the tag so it won't destroy the player or anything.
+	// Checks the tag so it won't destroy anything other than Flux geometry.
 	public void DeleteGeometry(string id) {
 		GameObject tempGameObject = getGameObjectFromId (id);
 		if (tempGameObject != null && tempGameObject.tag == "loadedgeometry") Destroy (tempGameObject);

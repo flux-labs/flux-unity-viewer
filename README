@@ -42,4 +42,10 @@ takes a flux data key in the shape of an array with two items, the first being
 the geometry and the second being your bim data.
 
 * If you want to shoot frisbees, change the static variable
-PlayerController.FrisbeesOff to false.
+PlayerController.FrisbeesOff to false. You can do this with SendMessage
+in the console on the webapp if you want to.
+
+### Project notes
+
+Please find the project notes here.
+https://docs.google.com/document/d/1zhflOlrxRYR-xru0biE-voybzLv_zLDCi_2gUcgNGks/edit#heading=h.zg4o77vrpkc4
