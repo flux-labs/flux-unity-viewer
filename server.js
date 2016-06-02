@@ -6,23 +6,23 @@ app.set('port', (process.env.PORT || 8091));
 // Views is the default directory for all template files
 app.set('view engine', 'ejs');
 
-app.get('/view/', function(req, res) {
-  res.render('viewport-simple-viewer');
+app.get('/vr/', function(req, res) {
+  res.render('vr-view');
 });
 
-app.use(/(\/view)?\/Release/,
+app.use(/(\/vr)?\/Release/,
     express.static(__dirname + '/unity-build-target/webgl/Release'));
-app.use(/(\/view)?\/TemplateData/,
+app.use(/(\/vr)?\/TemplateData/,
     express.static(__dirname + '/unity-build-target/webgl/TemplateData'));
-app.use(/(\/view)?\/flux-data-selector/,
+app.use(/(\/vr)?\/flux-data-selector/,
     express.static(__dirname + '/flux-data-selector'));
-app.use(/(\/view)?\/public/,
+app.use(/(\/vr)?\/public/,
     express.static(__dirname + '/public'));
-app.use(/(\/view)?\/flux-sdk-js/,
+app.use(/(\/vr)?\/flux-sdk-js/,
     express.static(__dirname + '/node_modules/flux-sdk-browser/dist/'));
 
 app.get('/', function(req, res) {
-  res.render('viewport-constructor');
+  res.render('desktop-view');
 });
 
 app.listen(app.get('port'), function() {

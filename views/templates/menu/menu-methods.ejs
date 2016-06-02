@@ -1,0 +1,32 @@
+<script>
+
+  (function(context) {
+
+    var panels = [];
+
+    function closePanels() {
+      var hiddenPanels = document.querySelectorAll('.hidden-panel');
+      Array.prototype.forEach.call(hiddenPanels, function(item) {
+        item.style.top = '9999px';
+      });
+      for (key in panels) {
+        panels[key] = false;
+      }
+    };
+    context.closePanels = closePanels;
+
+    function togglePanel(panelName) {
+      var exists = !!panels[panelName];
+      if (exists) {
+        document.querySelector('#' + panelName + '-panel').style.top = '9999px';
+      } else {
+        closePanels();
+        document.querySelector('#' + panelName + '-panel').style.top = '10%';
+      }
+      panels[panelName] = !exists;
+    }
+    context.togglePanel = togglePanel;
+
+  })(window);
+
+</script>

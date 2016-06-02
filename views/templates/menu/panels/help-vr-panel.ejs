@@ -1,0 +1,40 @@
+<div id="help-panel" class="hidden-panel ui raised segment">
+  <h2>
+    Help: VR viewer
+  </h2>
+  <img class="center" style="position:relative;" src="/public/cardboard-user.png">
+  <button id="close-help-panel" class="close-panels-button">
+    <i class="remove circle icon big"></i>
+  </button>
+  <p>
+    Welcome to the VR application for the Flux-Unity Geometry Viewer!
+  </p>
+  <p>
+    This viewer is meant to be used with a VR device, such as a Google
+    Cardboard. You can only move the camera using an accellerometer.
+  </p>
+  <p>
+    More controls:
+    <ul>
+      <li>Press and hold the button on your VR device to move forward.</li>
+      <li>Tap the same button quickly to jump.</li>
+      <li>You can keep jumping to get as high as you want.</li>
+      <li>
+        <button class="frisbee-button"
+                onclick="SendMessage('player', 'ToggleFrisbees');">
+          Press here to turn on (or off) the ability to throw frisbees
+          by tapping the button quickly. You will also jump.
+        </button>
+      </li>
+    </ul>
+  </p>
+  <p>
+    To share geometry with someone, use the desktop application at
+    <a href="https://flux-unity.herokuapp.com">
+      https://flux-unity.herokuapp.com
+    </a>.
+  </p>
+  <p>
+    Thanks for checking out our app! Direct any questions to nickm@flux.io
+  </p>
+</div>

@@ -1,0 +1,21 @@
+<button class="ui button show-toolbar display-on-load show-left">
+  <i class="ellipsis horizontal icon"></i>
+</button>
+<button class="ui button show-toolbar display-on-load show-right">
+  <i class="ellipsis horizontal icon"></i>
+</button>
+
+<script>
+  var ttc = (function toggleToolbarClosure () {
+    var toolbarOn = true;
+    function toggleToolbar() {
+      document.querySelector('.menu-items').style.display =
+        toolbarOn ? 'none' : 'block';
+      toolbarOn = !toolbarOn;
+    };
+    return toggleToolbar;
+  })();
+  document.querySelectorAll('.show-toolbar').forEach(function(item) {
+    item.addEventListener('click', ttc);
+  });
+</script>

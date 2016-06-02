@@ -1,0 +1,24 @@
+<script>
+  /* Set after the flux-data-inspector callback. */
+  window.ds.setOnValue(function(promise){
+    promise.then(window.keyListModule.LoadDataKey)
+    .catch(function(err) {
+      console.error(err);
+      if (err.toString() === "TypeError: Failed to fetch") {
+        window.showError("Uh oh! You're trying to load a project that " +
+          "you don't have access to or doesn't exist.");
+      }
+    });
+  });
+
+  // Copy the old projects promise callback so we can still call it while
+  // adding some extra functionality.
+  // ds.selectProject = (function(){
+  //   var oldSelectProjectCallback = ds.selectProject;
+  //   return function(projectId) {
+  //     window.keyListModule.ResetKeyList();
+  //     if (oldSelectProjectCallback) oldSelectProjectCallback.call(ds, projectId);
+  //   };
+  // })();
+
+</script>

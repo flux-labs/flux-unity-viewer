@@ -1,0 +1,36 @@
+<!--
+This page provides a simple 'read-only' interface for viewing geometry.
+Data key parameters will be encoded in the url.
+-->
+<% include templates/common-head-template %>
+<body>
+
+  <div class="loading-message center ui segment">
+    <p>Loading the mobile VR viewer for your Flux geometry.</p>
+    <p>This can take up to three minutes depending on your phone.</p>
+  </div>
+
+  <% include templates/unity-webgl-template %>
+  <% include templates/key-list-module %>
+  <% include templates/example-data %>
+
+  <!-- Menu and buttons -->
+  <div class="menu-items center display-on-load">
+    <% include templates/menu/menu-methods %>
+    <% include templates/menu/buttons/plus-button %>
+    <% include templates/menu/buttons/share-button %>
+    <% include templates/menu/buttons/help-button %>
+  </div>
+
+  <!-- Panels -->
+  <% include templates/menu/panels/plus-panel %>
+  <% include templates/menu/panels/help-vr-panel %>
+  <% include templates/menu/panels/share-panel %>
+  <% include templates/menu/panels/error-panel %>
+
+  <% include templates/vr-hide-toolbar %>
+
+  <% include templates/callbacks %>
+
+</body>
+

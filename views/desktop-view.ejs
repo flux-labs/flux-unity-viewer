@@ -1,0 +1,34 @@
+<!--
+This page provides the desktop interface, which is the only one that allows
+users to collect a handful of data keys together to be shared as a url.
+-->
+<% include templates/common-head-template %>
+<body>
+
+  <div class="loading-message center ui segment">
+    <p>Loading the desktop viewer for your Flux geometry.</p>
+    <p>This can take up to a minute depending on your computer.</p>
+  </div>
+
+  <% include templates/unity-webgl-template %>
+  <% include templates/key-list-module %>
+  <% include templates/example-data %>
+
+  <!-- Menu and buttons -->
+  <div class="menu-items center display-on-load">
+    <% include templates/menu/menu-methods %>
+    <% include templates/menu/buttons/fullscreen-button %>
+    <% include templates/menu/buttons/plus-button %>
+    <% include templates/menu/buttons/share-button %>
+    <% include templates/menu/buttons/help-button %>
+  </div>
+
+  <!-- Panels  -->
+  <% include templates/menu/panels/plus-panel %>
+  <% include templates/menu/panels/help-desktop-panel %>
+  <% include templates/menu/panels/share-panel %>
+  <% include templates/menu/panels/error-panel %>
+
+  <% include templates/callbacks %>
+
+</body>

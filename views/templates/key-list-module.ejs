@@ -1,0 +1,140 @@
+<script>
+
+  (function keyListModule(context) {
+
+    // Initialize data selector module (not the data selector UI).
+    context.ds = new FluxDataSelector("fa4e6dc7-c032-4089-a5b7-4ae367c6d006",
+      'https://flux-unity.herokuapp.com/');
+
+    // Creates a hashmap, which will be used to remember all loaded keys.
+    var keyList = {};
+
+    var loadedKeysList;
+
+    // This callback accepts new data keys as well as update information
+    // for data keys that have already been loaded.
+    // It is bound to the data selector's onValue callback.
+    function LoadDataKey(datakey) {
+      if (!datakey) return;
+
+      if (!loadedKeysList) {
+        loadedKeysList = document.querySelector('#loaded-keys-list');
+      }
+
+      if (datakey && datakey.id && keyList[datakey.id]) {
+        SendMessage("flux", "CreateGeometry",
+          datakey.id + JSON.stringify(datakey.value));
+      } else {
+        keyList[datakey.id] = {
+          id: datakey.id,
+          label: datakey.label
+        };
+        SendMessage("flux", "CreateGeometry",
+          datakey.id + JSON.stringify(datakey.value));
+      }
+      if (window.location.pathname === "/") makeKeyList();
+    };
+
+    function makeKeyList(removeList) {
+      if (!ds.selectedProjectId) return;
+      var sharableUrl = "/?project=" +
+        ds.selectedProjectId;
+      while (loadedKeysList.firstChild) {
+        loadedKeysList.removeChild(loadedKeysList.firstChild);
+      }
+
+      var AllkeyLiItems = document.querySelectorAll('[data-value]');
+      for (var i = 0; i < AllkeyLiItems.length; i++) {
+        AllkeyLiItems[i].classList.remove('selected');
+      }
+
+      if (!removeList) {
+        var idx = 0;
+        for (key in keyList) {
+          var keyLi = document
+            .querySelector('[data-value="' + keyList[key].id + '"]');
+          if (keyLi !== null) keyLi.classList.add('selected');
+          var li = document.createElement('li');
+          li.textContent = "Key " + ++idx + ": " + keyList[key].label +
+            ". Click to delete";
+          li.addEventListener('click', (function(id) {
+            return function(e) {
+              SendMessage("flux", "DeleteGeometry", keyList[id].id);
+              loadedKeysList.removeChild(e.target);
+              delete keyList[id];
+              makeKeyList();
+            };
+          })(keyList[key].id));
+          loadedKeysList.appendChild(li);
+          sharableUrl += "&key=" + keyList[key].id;
+        }
+        document.querySelector('#url').value =
+          context.location.origin + sharableUrl;
+      }
+
+      history.pushState(null, null,
+        removeList ? context.location.origin : sharableUrl);
+
+      context.keyListModule.completeInitialLoading();
+    };
+
+    function ResetKeyList() {
+      for (key in keyList) {
+        SendMessage("flux", "DeleteGeometry", keyList[key].id);
+      }
+      keyList = {};
+      makeKeyList(true);
+    };
+
+    // Show elements that aren't supposed to appear until everything is loaded.
+    // If this function has already run once, it won't run again.
+    var alreadyRan = false;
+    function completeInitialLoading () {
+      if(alreadyRan) return;
+      alreadyRan = true;
+      console.log('completeInitialLoading');
+
+      document.querySelector('.loading-message').style.display = "none";
+      var displayOnLoad = document.querySelectorAll('.display-on-load');
+      Array.prototype.forEach.call(displayOnLoad, function(item) {
+        item.style.opacity = 1;
+      });
+
+      setTimeout(function() {
+        document.querySelector('h1').style.opacity = 0;
+      }, 10000);
+
+      if (window.location.pathname == "/vr/") {
+        // If this has an accellerometer, initialize head tracking.
+        if (context.DeviceMotionEvent !== undefined) {
+          context.ondevicemotion = function(event) {
+            ax = event.accelerationIncludingGravity.x
+            ay = event.accelerationIncludingGravity.y
+            az = event.accelerationIncludingGravity.z
+            rotation = event.rotationRate;
+            if (rotation != null && rotation.alpha != null) {
+              SendMessage("player", "MoveMouseX", rotation.alpha);
+              SendMessage("player", "MoveMouseY", rotation.beta);
+              // Could do something with gamma eventually...
+              // arGamma = Math.round(rotation.gamma);
+            }
+          }
+        }
+      } else {
+        SendMessage("player", "SwitchCameraMode");
+        // You have to do this twice. TODO: Fix.
+        // setTimeout(function() {
+        //   SendMessage("player", "SwitchAllowMouseControls");
+        // }, 100);
+      }
+
+    };
+
+    context.keyListModule = {
+      completeInitialLoading: completeInitialLoading,
+      LoadDataKey: LoadDataKey,
+      ResetKeyList: ResetKeyList
+    };
+  })(window);
+
+</script>

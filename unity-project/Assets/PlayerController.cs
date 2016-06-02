@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour {
 
 	public static bool FrisbeesOff = true;
 
-	bool allowMouseAndWASDMovement;
+	bool vrControls;
 
 	void Start() {
 		monoCam = GameObject.Find ("Monoscopic main camera");
@@ -55,11 +55,6 @@ public class PlayerController : MonoBehaviour {
 
 		calibrateCamera ();
 		rigid = gameObject.GetComponent<Rigidbody> ();
-
-		allowMouseAndWASDMovement = false;
-		#if UNITY_EDITOR
-		allowMouseAndWASDMovement = true;
-		#endif
 	}
 
 	void calibrateCamera() {
@@ -76,20 +71,20 @@ public class PlayerController : MonoBehaviour {
 		calibrateCamera ();
 	}
 
-	public void SwitchAllowMouseControls() {
-		allowMouseAndWASDMovement = !allowMouseAndWASDMovement;
+	public void SwitchAllowVRControls() {
+		vrControls = !vrControls;
 
-		#if !UNITY_EDITOR && UNITY_WEBGL
-		WebGLInput.captureAllKeyboardInput = allowMouseAndWASDMovement;
-		#endif
+//		#if !UNITY_EDITOR && UNITY_WEBGL
+//		WebGLInput.captureAllKeyboardInput = vrControls;
+//		#endif
 
-		if (allowMouseAndWASDMovement) {
-			Cursor.visible = false;
-			Cursor.lockState = UnityEngine.CursorLockMode.Locked;
-		} else {
-			Cursor.visible = true;
-			Cursor.lockState = UnityEngine.CursorLockMode.None;
-		}
+//		if (vrControls) {
+//			Cursor.visible = false;
+//			Cursor.lockState = UnityEngine.CursorLockMode.Locked;
+//		} else {
+//			Cursor.visible = true;
+//			Cursor.lockState = UnityEngine.CursorLockMode.None;
+//		}
 	}
 
 	void Update() {
@@ -134,15 +129,20 @@ public class PlayerController : MonoBehaviour {
 		}
 		#endif
 
-		if (allowMouseAndWASDMovement) {
+		if (!vrControls) {
 			// Handle movement with WASD keys
 			Vector3 newVector = Vector3.zero;
 			newVector += Input.GetAxis ("Vertical") * cameraTransform.forward * speed;
 			newVector += Input.GetAxis ("Horizontal") * Vector3.Cross (cameraTransform.forward, Vector3.down) * speed;
 			rigid.velocity = new Vector3 (newVector.x, rigid.velocity.y, newVector.z);
 
-			MoveMouseY (Input.GetAxis ("Mouse Y"));
-			MoveMouseX (Input.GetAxis ("Mouse X"));
+			if (Input.GetMouseButton (0)) {
+				MoveMouseY (Input.GetAxis ("Mouse Y"));
+				MoveMouseX (Input.GetAxis ("Mouse X"));
+			} else {
+				MoveMouseY (0);
+				MoveMouseX (0);
+			}
 
 			if (Input.GetButtonDown ("jump")) {
 				Jump ();
@@ -187,12 +187,13 @@ public class PlayerController : MonoBehaviour {
 		rigid.velocity = new Vector3 (0, 5, 0);
 	}
 
+	// The in browser controls are way too fast.
 	public void MoveMouseX(float movement) {
-		inputX = movement;
+		inputX = movement/10;
 	}
 
 	public void MoveMouseY(float movement) {
-		inputY = movement;
+		inputY = movement/10;
 	}
 
 	public void ToggleFrisbees() {

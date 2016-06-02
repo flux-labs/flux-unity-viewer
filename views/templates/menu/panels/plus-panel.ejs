@@ -1,0 +1,28 @@
+<div id="plus-panel" class="ui raised segment hidden-panel">
+  <h2>
+    Flux Data Selector
+  </h2>
+  <button id="close-plus-panel" class="close-panels-button">
+    <i class="remove circle icon big"></i>
+  </button>
+
+  <!-- Flux Data Selector UI injection target -->
+  <div id="flux-data-selector"></div>
+
+  <!-- Key list module injection target  -->
+  <div id="loaded-keys-list"></div>
+</div>
+<script type="text/javascript" src="flux-data-selector/flux-data-selector-ui.js"></script>
+<script>
+  (function(context) {
+
+    // Activates the Flux Data Selector UI.
+    FluxDataSelectorUI(context.ds, 'flux-data-selector');
+
+    if (window.location.search === "") ds.showExamples();
+
+    document.querySelector('#close-plus-panel')
+    .addEventListener('click', closePanels);
+
+  })(window);
+</script>

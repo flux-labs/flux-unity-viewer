@@ -1,0 +1,32 @@
+  <!-- Error message for VR view without keys -->
+
+  <div id="error" class="hidden-panel display-on-load center ui segment" style="display:none;">
+    <p class="error-text ui">
+      Go to the <a href="https://flux-unity.herokuapp.com">desktop app</a>
+      <span id="error-msg-2">
+        to create a sharable link for your Flux geometry!
+      </span>
+    </p>
+    <button id="close-error-panel">
+      <i class="remove circle icon large"></i>
+    </button>
+  </div>
+  <script>
+    if (window.location.pathname === "/vr/") {
+      if (window.location.search === "") {
+        document.querySelector('#error').style.display = "block";
+      }
+    }
+
+    document.querySelector('#close-error-panel')
+    .addEventListener('click', function() {
+      document.querySelector('#error').style.top = '9999px';
+    })
+
+    window.showError = function(errormessage) {
+      document.querySelector('#error').style.display = "block";
+      document.querySelector('.error-text').textContent = errormessage;
+    }
+
+  </script>
+
