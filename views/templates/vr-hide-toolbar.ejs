@@ -15,7 +15,9 @@
     };
     return toggleToolbar;
   })();
-  document.querySelectorAll('.show-toolbar').forEach(function(item) {
+
+  var toolbars = document.querySelectorAll('.show-toolbar');
+  Array.prototype.forEach.call(toolbars, function(item) {
     item.addEventListener('click', ttc);
   });
 </script>
