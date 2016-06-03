@@ -104,7 +104,7 @@
         document.querySelector('h1').style.opacity = 0;
       }, 10000);
 
-      if (window.location.pathname == "/vr/") {
+      if (window.location.pathname === "/vr/") {
         // If this has an accellerometer, initialize head tracking.
         if (context.DeviceMotionEvent !== undefined) {
           context.ondevicemotion = function(event) {
@@ -113,8 +113,8 @@
             az = event.accelerationIncludingGravity.z
             rotation = event.rotationRate;
             if (rotation != null && rotation.alpha != null) {
-              SendMessage("player", "MoveMouseX", rotation.alpha);
-              SendMessage("player", "MoveMouseY", rotation.beta);
+              SendMessage("player", "MoveMouseX", rotation.alpha * 1.6);
+              SendMessage("player", "MoveMouseY", rotation.beta * 1.6);
               // Could do something with gamma eventually...
               // arGamma = Math.round(rotation.gamma);
             }

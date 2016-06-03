@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour {
 //		crosshairRight = GameObject.Find ("crosshairs right").GetComponent<Image>();
 //		crosshairSingle = GameObject.Find ("crosshairs center").GetComponent<Image>();
 
-		ToggleMapCam ();
+//		ToggleMapCam ();
 
 		calibrateCamera ();
 		rigid = gameObject.GetComponent<Rigidbody> ();
@@ -108,10 +108,9 @@ public class PlayerController : MonoBehaviour {
 		cameraTransform.localEulerAngles = new Vector3(-rotationY, 0, 0);
 		transform.localEulerAngles = new Vector3 (0, rotationX, 0);
 
-		#if UNITY_WEBGL
 		if (Input.touchCount > 0) {
 			if (buttonAlreadyClicked) {
-				if (Time.time - .3f > lastButtonClickMobile) {
+				if (Time.time - .15f > lastButtonClickMobile) {
 					// If the button has been held down for more than .3 seconds, 
 					// start moving forward.
 					Vector3 newVec = Vector3.zero;
@@ -128,15 +127,10 @@ public class PlayerController : MonoBehaviour {
 				// If the screen was touched and released before .3 seconds, jump and shoot a frisbee.
 				Jump ();
 				ShootFrisbee ();
-				buttonAlreadyClicked = false;
 			}
 
 			buttonAlreadyClicked = false;
-		}
-		#endif
 
-		if (!vrControls) {
-			// Handle movement with WASD keys
 			Vector3 newVector = Vector3.zero;
 			newVector += Input.GetAxis ("Vertical") * cameraTransform.forward * speed;
 			newVector += Input.GetAxis ("Horizontal") * Vector3.Cross (cameraTransform.forward, Vector3.down) * speed;

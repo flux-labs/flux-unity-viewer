@@ -95,7 +95,7 @@ p.error-text.ui {
   background-color: rgba(100, 100, 100, .5);
   transition: background-color .2s;
   cursor: pointer;
-  color: #d8d8d8;
+  color: white;
 }
 .menu-items button:hover {
   background-color: rgba(200, 200, 200, .5);
