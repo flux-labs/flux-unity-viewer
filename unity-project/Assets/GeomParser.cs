@@ -27,7 +27,13 @@ public class GeomParser : MonoBehaviour {
 	public static bool repositioningGeometry = false;
 
 	public void MakeGeometry(JSONObject unknownJson) {
-		mesh = gameObject.GetComponent<MeshFilter> ().mesh;
+		Mesh mesh = new Mesh();
+		gameObject.GetComponent<MeshFilter> ().mesh = mesh;
+		mesh.Clear();
+
+		// Reset old values to prevent weird geometry from appearing
+		vertices.ForEach((Vector3 obj) => obj = new Vector3(0,0,0));
+		triangles.ForEach((int obj) => obj = 0);
 
 		vertices = new List<Vector3> (); 
 		triangles = new List<int> ();
@@ -48,8 +54,8 @@ public class GeomParser : MonoBehaviour {
 		// Creating an array and assigning mesh.vertices to it is 
 		// much faster because of code 'behind the scenes'
 		// http://docs.unity3d.com/Manual/Example-CreatingaBillboardPlane.html
-		mesh.vertices = vertices.ToArray();
-		mesh.triangles = triangles.ToArray();
+		mesh.SetVertices(vertices);
+		mesh.SetTriangles(triangles, 0);
 
 		Vector2[] uv = new Vector2[vertices.Count];
 		for (int i = 0; i < uv.Length; i++) {

@@ -22,16 +22,16 @@
       }
 
       if (datakey && datakey.id && keyList[datakey.id]) {
-        SendMessage("flux", "CreateGeometry",
-          datakey.id + JSON.stringify(datakey.value));
       } else {
         keyList[datakey.id] = {
           id: datakey.id,
           label: datakey.label
         };
-        SendMessage("flux", "CreateGeometry",
-          datakey.id + JSON.stringify(datakey.value));
       }
+
+      SendMessage("flux", "CreateGeometry",
+        datakey.id + JSON.stringify(datakey.value));
+
       if (window.location.pathname === "/") makeKeyList();
     };
 

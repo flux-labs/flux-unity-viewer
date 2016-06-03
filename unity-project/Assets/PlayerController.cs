@@ -49,9 +49,9 @@ public class PlayerController : MonoBehaviour {
 	void Start() {
 		monoCam = GameObject.Find ("Monoscopic main camera");
 		stereoCam = GameObject.Find ("Stereoscopic main camera");
-		crosshairLeft = GameObject.Find ("crosshairs left").GetComponent<Image>();
-		crosshairRight = GameObject.Find ("crosshairs right").GetComponent<Image>();
-		crosshairSingle = GameObject.Find ("crosshairs center").GetComponent<Image>();
+//		crosshairLeft = GameObject.Find ("crosshairs left").GetComponent<Image>();
+//		crosshairRight = GameObject.Find ("crosshairs right").GetComponent<Image>();
+//		crosshairSingle = GameObject.Find ("crosshairs center").GetComponent<Image>();
 
 		calibrateCamera ();
 		rigid = gameObject.GetComponent<Rigidbody> ();
@@ -60,10 +60,10 @@ public class PlayerController : MonoBehaviour {
 	void calibrateCamera() {
 		cameraTransform = StereoscopicVision ? stereoCam.transform : monoCam.transform;
 		monoCam.SetActive (!StereoscopicVision);
-		crosshairSingle.enabled = (!StereoscopicVision);
+//		crosshairSingle.enabled = (!StereoscopicVision);
 		stereoCam.SetActive (StereoscopicVision);
-		crosshairLeft.enabled = (StereoscopicVision);
-		crosshairRight.enabled = (StereoscopicVision);
+//		crosshairLeft.enabled = (StereoscopicVision);
+//		crosshairRight.enabled = (StereoscopicVision);
 	}
 
 	public void SwitchCameraMode() {
