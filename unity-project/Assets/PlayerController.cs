@@ -36,9 +36,12 @@ public class PlayerController : MonoBehaviour {
 
 	GameObject monoCam;
 	GameObject stereoCam;
+	GameObject mapCam;
 	Image crosshairLeft;
 	Image crosshairRight;
 	Image crosshairSingle;
+
+	public Shader toonShader;
 
 	public BimInfoCanvas bimfo;
 
@@ -49,9 +52,12 @@ public class PlayerController : MonoBehaviour {
 	void Start() {
 		monoCam = GameObject.Find ("Monoscopic main camera");
 		stereoCam = GameObject.Find ("Stereoscopic main camera");
+		mapCam = GameObject.Find ("map camera");
 //		crosshairLeft = GameObject.Find ("crosshairs left").GetComponent<Image>();
 //		crosshairRight = GameObject.Find ("crosshairs right").GetComponent<Image>();
 //		crosshairSingle = GameObject.Find ("crosshairs center").GetComponent<Image>();
+
+		ToggleMapCam ();
 
 		calibrateCamera ();
 		rigid = gameObject.GetComponent<Rigidbody> ();
@@ -198,5 +204,13 @@ public class PlayerController : MonoBehaviour {
 
 	public void ToggleFrisbees() {
 		FrisbeesOff = !FrisbeesOff;
+	}
+
+	public void ToggleMapCam() {
+//		mapCam.GetComponent<Camera> ().enabled = false;
+		Camera mc = mapCam.GetComponent<Camera> ();
+		mc.enabled = true;
+//		mc.SetReplacementShader (toonShader, null);
+		mc.RenderWithShader (toonShader, null);
 	}
 }
