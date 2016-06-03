@@ -77,20 +77,25 @@ p.error-text.ui {
 
 /* Menu */
 .menu-items {
+  border-radius: 6px;
   top: 85%;
   padding: 0;
   z-index: 22;
-  font-size: 4em;
+  color: white;
+  font-size: 2em;
+  overflow: hidden;
 }
 .menu-items button {
   list-style-type: none;
   padding-top: .5em;
   border: 0;
-  height: 1.45em;
+  height: 3em;
+  width: 3em;
   float: left;
   background-color: rgba(100, 100, 100, .5);
   transition: background-color .2s;
   cursor: pointer;
+  color: #d8d8d8;
 }
 .menu-items button:hover {
   background-color: rgba(200, 200, 200, .5);
