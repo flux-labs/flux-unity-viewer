@@ -119,6 +119,16 @@ p.error-text.ui {
   text-decoration: underline;
   text-align: left;
 }
+#loaded-keys-list li {
+  list-style-type: none;
+  margin: 4px;
+  padding: 4px;
+  border-radius:3px;
+  cursor: pointer;
+}
+#loaded-keys-list li:hover {
+  background-color: #ccc;
+}
 
 /* Show toolbar button for vr mode */
 .ui.button.show-toolbar {

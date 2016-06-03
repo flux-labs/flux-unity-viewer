@@ -55,7 +55,7 @@
             .querySelector('[data-value="' + keyList[key].id + '"]');
           if (keyLi !== null) keyLi.classList.add('selected');
           var li = document.createElement('li');
-          li.textContent = "Key " + ++idx + ": " + keyList[key].label +
+          li.textContent = "Data Key " + ++idx + ": " + keyList[key].label +
             ". Click to delete";
           li.addEventListener('click', (function(id) {
             return function(e) {
