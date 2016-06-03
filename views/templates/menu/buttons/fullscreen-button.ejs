@@ -4,6 +4,10 @@
 <script>
   document.querySelector('#fullscreen-button')
   .addEventListener('click', function(){
-    SetFullscreen(1);
+    try {
+      SetFullscreen(1);
+    } catch(err) {
+      console.log('hola');
+    }
   });
 </script>

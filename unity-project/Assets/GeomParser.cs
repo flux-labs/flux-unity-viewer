@@ -138,14 +138,16 @@ public class GeomParser : MonoBehaviour {
 					multiplier *= MaxSize;
 						
 					if (repositioningGeometry) {
+						// Y axis is flipped, for some reason.
 						vertices.Add (new Vector3 (
 							((vertex.list [0].n) * multiplier) / maximumEdgeSize - smallestX, 
-							((vertex.list [1].n) * multiplier) / maximumEdgeSize - smallestY, 
+							(((vertex.list [1].n) * multiplier) / maximumEdgeSize - smallestY) * -1, 
 							((vertex.list [2].n) * multiplier) / maximumEdgeSize - smallestZ));
 					} else {
+						// Y axis still flipped.
 						vertices.Add (new Vector3 (
 							vertex.list [0].n * multiplier,
-							vertex.list [1].n * multiplier,
+							vertex.list [1].n * multiplier * -1,
 							vertex.list [2].n * multiplier));
 					}
 				}       
