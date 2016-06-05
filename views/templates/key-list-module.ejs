@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Big module which handles the player's data keys.
+   * Gets attached to window so other things can call its public methods.
+   */
 
   (function keyListModule(context) {
 
@@ -9,6 +13,7 @@
     // Creates a hashmap, which will be used to remember all loaded keys.
     var keyList = {};
 
+    // HTML insertion point for list of keys.
     var loadedKeysList;
 
     // This callback accepts new data keys as well as update information
@@ -35,6 +40,8 @@
       if (window.location.pathname === "/") MakeKeyList();
     };
 
+    // Public method which recreates the key list and computes
+    // player position. This gets called all over the place.
     function MakeKeyList(removeList) {
       if (!ds.selectedProjectId) return;
       var sharableUrl = "/?project=" +
@@ -81,6 +88,7 @@
       context.keyListModule.completeInitialLoading();
     };
 
+    // Empties the key list.
     function ResetKeyList() {
       for (key in keyList) {
         SendMessage("flux", "DeleteGeometry", keyList[key].id);
@@ -89,27 +97,16 @@
       MakeKeyList(true);
     };
 
-    // Promise-like module which waits for a value to be returned from Unity.
-    // Receive is a public method attached to Window so unity can call it
-    // with Application.ExternalCall()
+    // Pair of functions which wait for a value to be returned
+    // from Unity with Application.ExternalCall()
     var whenReceivedCallback = null;
     function getPlayerPosition(callback) {
       whenReceivedCallback = callback;
       SendMessage("player", "GetPosition");
     };
     function ReceivePosition(data) {
-      console.log('got position!');
-      console.log(data);
-      // var matches = data.match(/\((-?\d+\.\d+),\ (-?\d+\.\d+),\ (-?\d+\.\d+)\)/);
-      // if (matches && whenReceivedCallback) {
-        whenReceivedCallback(data);
-      // }
+      whenReceivedCallback(data);
     };
-
-    function setPlayerPosition() {
-
-    };
-
 
 
     // Show elements that aren't supposed to appear until everything is loaded,
@@ -157,7 +154,8 @@
       ResetKeyList: ResetKeyList,
       MakeKeyList: MakeKeyList
     };
-    context.ReceivePosition = ReceivePosition; // Unity has to call this method directly
+    context.ReceivePosition = ReceivePosition; // Unity calls this directly
+
   })(window);
 
 </script>

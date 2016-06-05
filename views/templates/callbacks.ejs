@@ -13,12 +13,12 @@
 
   // Copy the old projects promise callback so we can still call it while
   // adding some extra functionality.
-  // ds.selectProject = (function(){
-  //   var oldSelectProjectCallback = ds.selectProject;
-  //   return function(projectId) {
-  //     window.keyListModule.ResetKeyList();
-  //     if (oldSelectProjectCallback) oldSelectProjectCallback.call(ds, projectId);
-  //   };
-  // })();
+  ds.selectProject = (function(){
+    var oldSelectProjectCallback = ds.selectProject;
+    return function(projectId) {
+      window.keyListModule.ResetKeyList();
+      if (oldSelectProjectCallback) oldSelectProjectCallback.call(ds, projectId);
+    };
+  })();
 
 </script>

@@ -75,5 +75,3 @@ public class ModelManager : MonoBehaviour {
 	}
 }
 
-/// Texture sources:
-/// http://webtreats.mysitemyway.com/

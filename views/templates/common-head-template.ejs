@@ -41,10 +41,7 @@ as the <head> and shared javascript.
     navigator.__defineGetter__('userAgent', function(){ return ' '; });
     navigator.__defineGetter__('vendor', function(){ return ' '; });
 
-  /**
-   * Loaded is called when the webgl viewport finishes loading.
-   */
-
+    // Loaded is called when the webgl viewport finishes loading.
     function Loaded(arg) {
 
       // Search the url for a project and keys.
@@ -73,9 +70,10 @@ as the <head> and shared javascript.
         (y = /[?&](position)=(\((-?\d+\.\d+),(-?\d+\.\d+),(-?\d+\.\d+)\)\((-?\d+\.\d+),(-?\d+\.\d+),(-?\d+\.\d+)\))/
           .exec(context.location.search)) ?
         y[2] : null;
-      console.log(position);
       if (position) {
-        SendMessage("player", "SetPosition", position);
+        setTimeout(function() {
+          SendMessage("player", "SetPosition", position);
+        }, 200);
       }
 
       context.keyListModule.completeInitialLoading();

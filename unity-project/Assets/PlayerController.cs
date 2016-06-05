@@ -223,7 +223,8 @@ public class PlayerController : MonoBehaviour {
 			.Cast<Match>()
 			.Select(m => float.Parse(m.Value))
 			.ToArray();
-		transform.position = new Vector3 (matches [0], matches [1], matches [2]);
+		// Add 2f to y position so the player 'falls' into place.
+		transform.position = new Vector3 (matches [0], matches [1] + 2f, matches [2]);
 		transform.localEulerAngles = new Vector3 (matches [3], matches [4], matches [5]);
 	}
 }
