@@ -70,6 +70,7 @@ h1 {
 .loading-message {
   top: 10%;
   z-index: 21;
+  position: fixed;
 }
 p.error-text.ui {
   padding: 10px 40px;

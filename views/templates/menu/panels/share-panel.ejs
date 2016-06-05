@@ -29,20 +29,6 @@
   document.querySelector('#close-share-panel')
   .addEventListener('click', closePanels);
 
-  function copyLink (addVr) {
-
-  };
-
-  document.querySelector('#desktop-copy')
-  .addEventListener('click', function() {
-    copyLink(false);
-  });
-
-  document.querySelector('#vr-copy')
-  .addEventListener('click', function() {
-    copyLink(true);
-  });
-
   var desktop = new Clipboard('#desktop-copy');
   var vr = new Clipboard('#vr-copy', {
     text: function() {

@@ -32,10 +32,10 @@
       SendMessage("flux", "CreateGeometry",
         datakey.id + JSON.stringify(datakey.value));
 
-      if (window.location.pathname === "/") makeKeyList();
+      if (window.location.pathname === "/") MakeKeyList();
     };
 
-    function makeKeyList(removeList) {
+    function MakeKeyList(removeList) {
       if (!ds.selectedProjectId) return;
       var sharableUrl = "/?project=" +
         ds.selectedProjectId;
@@ -62,18 +62,21 @@
               SendMessage("flux", "DeleteGeometry", keyList[id].id);
               loadedKeysList.removeChild(e.target);
               delete keyList[id];
-              makeKeyList();
+              MakeKeyList();
             };
           })(keyList[key].id));
           loadedKeysList.appendChild(li);
           sharableUrl += "&key=" + keyList[key].id;
         }
-        document.querySelector('#url').value =
-          context.location.origin + sharableUrl;
-      }
 
-      history.pushState(null, null,
-        removeList ? context.location.origin : sharableUrl);
+        getPlayerPosition(function(position) {
+          sharableUrl += "&position=" + position.replace(/\ /g, '');
+          document.querySelector('#url').value =
+            context.location.origin + sharableUrl;
+          history.pushState(null, null, removeList ?
+            context.location.origin + context.location.pathname : sharableUrl);
+        });
+      }
 
       context.keyListModule.completeInitialLoading();
     };
@@ -83,16 +86,39 @@
         SendMessage("flux", "DeleteGeometry", keyList[key].id);
       }
       keyList = {};
-      makeKeyList(true);
+      MakeKeyList(true);
     };
 
-    // Show elements that aren't supposed to appear until everything is loaded.
+    // Promise-like module which waits for a value to be returned from Unity.
+    // Receive is a public method attached to Window so unity can call it
+    // with Application.ExternalCall()
+    var whenReceivedCallback = null;
+    function getPlayerPosition(callback) {
+      whenReceivedCallback = callback;
+      SendMessage("player", "GetPosition");
+    };
+    function ReceivePosition(data) {
+      console.log('got position!');
+      console.log(data);
+      // var matches = data.match(/\((-?\d+\.\d+),\ (-?\d+\.\d+),\ (-?\d+\.\d+)\)/);
+      // if (matches && whenReceivedCallback) {
+        whenReceivedCallback(data);
+      // }
+    };
+
+    function setPlayerPosition() {
+
+    };
+
+
+
+    // Show elements that aren't supposed to appear until everything is loaded,
+    // also initialize head tracking and choose stereoscopic/monoscopic camera.
     // If this function has already run once, it won't run again.
     var alreadyRan = false;
     function completeInitialLoading () {
       if(alreadyRan) return;
       alreadyRan = true;
-      console.log('completeInitialLoading');
 
       document.querySelector('.loading-message').style.display = "none";
       var displayOnLoad = document.querySelectorAll('.display-on-load');
@@ -122,19 +148,16 @@
         }
       } else {
         SendMessage("player", "SwitchCameraMode");
-        // You have to do this twice. TODO: Fix.
-        // setTimeout(function() {
-        //   SendMessage("player", "SwitchAllowMouseControls");
-        // }, 100);
       }
-
     };
 
     context.keyListModule = {
       completeInitialLoading: completeInitialLoading,
       LoadDataKey: LoadDataKey,
-      ResetKeyList: ResetKeyList
+      ResetKeyList: ResetKeyList,
+      MakeKeyList: MakeKeyList
     };
+    context.ReceivePosition = ReceivePosition; // Unity has to call this method directly
   })(window);
 
 </script>

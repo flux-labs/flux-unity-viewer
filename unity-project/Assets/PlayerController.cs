@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 public class PlayerController : MonoBehaviour {
 
@@ -206,5 +208,22 @@ public class PlayerController : MonoBehaviour {
 		mc.enabled = true;
 //		mc.SetReplacementShader (toonShader, null);
 		mc.RenderWithShader (toonShader, null);
+	}
+
+	public void GetPosition() {
+		Application.ExternalCall ("ReceivePosition", transform.position.ToString () + transform.localEulerAngles.ToString()); 
+	}
+
+	public void SetPosition(string pos) {
+		// Verify format before continuing. 
+		print("SetPosition");
+		if (!Regex.IsMatch(pos, @"\((-?\d+\.\d+),(-?\d+\.\d+),(-?\d+\.\d+)\)\((-?\d+\.\d+),(-?\d+\.\d+),(-?\d+\.\d+)\)")) return;
+		print ("Got through");
+		float[] matches = Regex.Matches(pos, @"-?\d+\.\d+")
+			.Cast<Match>()
+			.Select(m => float.Parse(m.Value))
+			.ToArray();
+		transform.position = new Vector3 (matches [0], matches [1], matches [2]);
+		transform.localEulerAngles = new Vector3 (matches [3], matches [4], matches [5]);
 	}
 }

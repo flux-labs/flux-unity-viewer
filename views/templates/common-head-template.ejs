@@ -1,5 +1,6 @@
 <!--
-common-head-template includes the <head> elements shared between views.
+common-head-template includes the html elements shared between views, such
+as the <head> and shared javascript.
 -->
 
 <!DOCTYPE html>
@@ -60,8 +61,21 @@ common-head-template includes the <head> elements shared between views.
         if (proj && !localStorage.getItem('fluxCredentials')) {
           window.showError("You're trying to view a Flux Project, but you're " +
             "not logged into Flux! Try logging in first.");
+        } else if (!proj) {
+          window.showError("Welcome! We've provided an example building " +
+            "to get you started. Log in to Flux with the + button " +
+            "to see your own buildings!");
         }
         context.ds.selectExample("thomas' building");
+      }
+
+      var position =
+        (y = /[?&](position)=(\((-?\d+\.\d+),(-?\d+\.\d+),(-?\d+\.\d+)\)\((-?\d+\.\d+),(-?\d+\.\d+),(-?\d+\.\d+)\))/
+          .exec(context.location.search)) ?
+        y[2] : null;
+      console.log(position);
+      if (position) {
+        SendMessage("player", "SetPosition", position);
       }
 
       context.keyListModule.completeInitialLoading();
