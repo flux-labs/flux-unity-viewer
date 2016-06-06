@@ -3,6 +3,16 @@ var app = express();
 
 app.set('port', (process.env.PORT || 8091));
 
+// Redirect to https.
+if (process.env.IS_HEROKU) {
+  app.get('*',function(req,res,next){
+    if(req.headers['x-forwarded-proto']!='https')
+      res.redirect('https://flux-unity.herokuapp.com'+req.url)
+    else
+      next() /* Continue to other routes if we're not redirecting */
+  });
+}
+
 // Views is the default directory for all template files
 app.set('view engine', 'ejs');
 
