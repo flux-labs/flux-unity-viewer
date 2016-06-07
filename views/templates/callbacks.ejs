@@ -17,6 +17,7 @@
     var oldSelectProjectCallback = ds.selectProject;
     return function(projectId) {
       window.keyListModule.ResetKeyList();
+      SendMessage("flux", "ResetCoords");
       if (oldSelectProjectCallback) oldSelectProjectCallback.call(ds, projectId);
     };
   })();

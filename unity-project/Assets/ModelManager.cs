@@ -63,7 +63,6 @@ public class ModelManager : MonoBehaviour {
 	// Something about this method is wonky and doesn't work as an updating function. 
 	void AddGeometryToObject(GameObject newObj, JSONObject json) {
 		GeomParser g = newObj.GetComponent<GeomParser> ();
-		g.MaxSize = MaxSize;
 		g.MakeGeometry (json);
 		materialIdx++;
 		g.GetComponent<MeshRenderer> ().material = materials [materialIdx%materials.Count];
@@ -72,6 +71,10 @@ public class ModelManager : MonoBehaviour {
 	// Sets the scale of all geometry loaded from this point forward.
 	public void SetSize(float newSize) {
 		MaxSize = newSize;
+	}
+
+	public void ResetCoords() {
+		GeomParser.SmallestCoordsUnset = true;
 	}
 }
 

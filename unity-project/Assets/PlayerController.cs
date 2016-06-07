@@ -81,23 +81,11 @@ public class PlayerController : MonoBehaviour {
 
 	public void SwitchAllowVRControls() {
 		vrControls = !vrControls;
-
-//		#if !UNITY_EDITOR && UNITY_WEBGL
-//		WebGLInput.captureAllKeyboardInput = vrControls;
-//		#endif
-
-//		if (vrControls) {
-//			Cursor.visible = false;
-//			Cursor.lockState = UnityEngine.CursorLockMode.Locked;
-//		} else {
-//			Cursor.visible = true;
-//			Cursor.lockState = UnityEngine.CursorLockMode.None;
-//		}
 	}
 
 	void Update() {
 		ControlMovement ();
-		RaycastBimData ();
+//		RaycastBimData ();
 	}
 
 	void ControlMovement() {
@@ -113,7 +101,7 @@ public class PlayerController : MonoBehaviour {
 		if (Input.touchCount > 0) {
 			if (buttonAlreadyClicked) {
 				if (Time.time - .15f > lastButtonClickMobile) {
-					// If the button has been held down for more than .3 seconds, 
+					// If the button has been held down for more than .15 seconds, 
 					// start moving forward.
 					Vector3 newVec = Vector3.zero;
 					newVec += cameraTransform.forward * speed;
@@ -126,7 +114,7 @@ public class PlayerController : MonoBehaviour {
 			}
 		} else {
 			if (buttonAlreadyClicked && (Time.time - .15f < lastButtonClickMobile)) {
-				// If the screen was touched and released before .3 seconds, jump and shoot a frisbee.
+				// If the screen was touched and released before .15 seconds, jump and (optionally) shoot a frisbee.
 				Jump ();
 				ShootFrisbee ();
 			}
@@ -156,24 +144,25 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void RaycastBimData() {
-		Camera cam = StereoscopicVision ? 
-			cameraTransform.GetComponentInChildren<Camera> () :
-			cameraTransform.GetComponent<Camera> ();
-
-		// If using a stereoscopic camera, the cursor should be at one quarter of screen width, 
-		// otherwise it should be one half.
-		int screenSizeDivisor = StereoscopicVision ? 4 : 2;
-		Ray ray = cam.ScreenPointToRay(new Vector2(Screen.width/screenSizeDivisor, Screen.height/2));
-
-		// Attempt to find a BimData class in the object and display its information.
-		RaycastHit hit;
-		if (Physics.Raycast (ray, out hit)) {
-			BimData b = hit.collider.gameObject.GetComponent<BimData> ();
-			if (b != null) bimfo.SetText (b.GetBimData());
-				
-		} else bimfo.SetText ("");
-	}
+	// Currently disabled.
+//	void RaycastBimData() {
+//		Camera cam = StereoscopicVision ? 
+//			cameraTransform.GetComponentInChildren<Camera> () :
+//			cameraTransform.GetComponent<Camera> ();
+//
+//		// If using a stereoscopic camera, the cursor should be at one quarter of screen width, 
+//		// otherwise it should be one half.
+//		int screenSizeDivisor = StereoscopicVision ? 4 : 2;
+//		Ray ray = cam.ScreenPointToRay(new Vector2(Screen.width/screenSizeDivisor, Screen.height/2));
+//
+//		// Attempt to find a BimData class in the object and display its information.
+//		RaycastHit hit;
+//		if (Physics.Raycast (ray, out hit)) {
+//			BimData b = hit.collider.gameObject.GetComponent<BimData> ();
+//			if (b != null) bimfo.SetText (b.GetBimData());
+//				
+//		} else bimfo.SetText ("");
+//	}
 
 	void ShootFrisbee() {
 		if (FrisbeesOff) return;
@@ -202,6 +191,7 @@ public class PlayerController : MonoBehaviour {
 		FrisbeesOff = !FrisbeesOff;
 	}
 
+	// Currently disabled.
 	public void ToggleMapCam() {
 //		mapCam.GetComponent<Camera> ().enabled = false;
 		Camera mc = mapCam.GetComponent<Camera> ();

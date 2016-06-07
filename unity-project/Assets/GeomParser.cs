@@ -14,17 +14,15 @@ public class GeomParser : MonoBehaviour {
 	List<Vector2> uv = new List<Vector2> ();
 	List<int> triangles = new List<int>();
 
-	float smallestX;
-	float smallestY;
-	float smallestZ;
-	float largestX;
-	float largestY;
-	float largestZ;
-	float maximumEdgeSize;
-	public float MaxSize = 1;
-	bool smallestCoordsUnset;
-
-	public static bool repositioningGeometry = false;
+	static float smallestX;
+	static float smallestY;
+	static float smallestZ;
+	static float largestX;
+	static float largestY;
+	static float largestZ;
+	static float maximumEdgeSize;
+	public static float MaxSize = 1;
+	public static bool SmallestCoordsUnset = true;
 
 	public void MakeGeometry(JSONObject unknownJson) {
 		Mesh mesh = new Mesh();
@@ -38,11 +36,15 @@ public class GeomParser : MonoBehaviour {
 		vertices = new List<Vector3> (); 
 		triangles = new List<int> ();
 
-		// If the user wishes to reposition the geometry close to them,
-		// we have to check what the smallest X, Y and Z values are.
-		smallestCoordsUnset = !repositioningGeometry;
-		if (repositioningGeometry) {
+		if (SmallestCoordsUnset) {
+			// Reset everything in case you just switched projects.
+			SmallestCoordsUnset = false;
+			smallestX = 0f; smallestY = 0f; smallestZ = 0f;
+			largestX = 0f; largestY = 0f; largestZ = 0f;
+			maximumEdgeSize = 0f;
 			RecursiveGeometrySizingPass (unknownJson);
+
+			// Basically set maximumEdgeSize to the maximum edge size. Check out them ternary ops boys
 			maximumEdgeSize = largestX - smallestX;
 			maximumEdgeSize = (maximumEdgeSize < (largestY - smallestY)) ? largestY - smallestY : maximumEdgeSize;
 			maximumEdgeSize = (maximumEdgeSize < (largestZ - smallestZ)) ? largestZ - smallestZ : maximumEdgeSize;
@@ -134,22 +136,14 @@ public class GeomParser : MonoBehaviour {
 				for (int i = 0; i < inspectedVertices.list.Count; i++) {
 					JSONObject vertex = inspectedVertices.list [i];
 
-					float multiplier = .06f;
-					multiplier *= MaxSize;
-						
-					if (repositioningGeometry) {
-						// Y axis is flipped, for some reason.
-						vertices.Add (new Vector3 (
-							((vertex.list [0].n) * multiplier) / maximumEdgeSize - smallestX, 
-							(((vertex.list [1].n) * multiplier) / maximumEdgeSize - smallestY) * -1, 
-							((vertex.list [2].n) * multiplier) / maximumEdgeSize - smallestZ));
-					} else {
-						// Y axis still flipped.
-						vertices.Add (new Vector3 (
-							vertex.list [0].n * multiplier,
-							vertex.list [1].n * multiplier * -1,
-							vertex.list [2].n * multiplier));
-					}
+//					float multiplier = .06f;
+//					multiplier *= MaxSize;
+//						
+					// Y axis is flipped, for some reason.
+					vertices.Add (new Vector3 (
+						vertex.list [0].n - smallestX, 
+						(vertex.list [1].n - smallestY) * -1, 
+						vertex.list [2].n - smallestZ));
 				}       
 			}
 		}
@@ -177,19 +171,15 @@ public class GeomParser : MonoBehaviour {
 				JSONObject inspectedVertices = unknownJson.list [verticesIdx];
 				for (int i = 0; i < inspectedVertices.list.Count; i++) {
 					JSONObject vertex = inspectedVertices.list [i];
-					if (smallestCoordsUnset || vertex.list[0].n < smallestX) smallestX = vertex.list[0].n;
-					if (smallestCoordsUnset || vertex.list[1].n < smallestY) smallestY = vertex.list[1].n;
-					if (smallestCoordsUnset || vertex.list[2].n < smallestZ) smallestZ = vertex.list[2].n;
-					if (smallestCoordsUnset || vertex.list[0].n > largestX) largestX = vertex.list[0].n;
-					if (smallestCoordsUnset || vertex.list[1].n > largestY) largestY = vertex.list[1].n;
-					if (smallestCoordsUnset || vertex.list[2].n > largestZ) largestZ = vertex.list[2].n;
-					smallestCoordsUnset = false;
+					if (SmallestCoordsUnset || vertex.list[0].n < smallestX) smallestX = vertex.list[0].n;
+					if (SmallestCoordsUnset || vertex.list[1].n < smallestY) smallestY = vertex.list[1].n;
+					if (SmallestCoordsUnset || vertex.list[2].n < smallestZ) smallestZ = vertex.list[2].n;
+					if (SmallestCoordsUnset || vertex.list[0].n > largestX) largestX = vertex.list[0].n;
+					if (SmallestCoordsUnset || vertex.list[1].n > largestY) largestY = vertex.list[1].n;
+					if (SmallestCoordsUnset || vertex.list[2].n > largestZ) largestZ = vertex.list[2].n;
+					SmallestCoordsUnset = false;
 				}       
 			}
 		}
-	}
-
-	public void SwitchRepositioning() {
-		repositioningGeometry = !repositioningGeometry;
 	}
 }

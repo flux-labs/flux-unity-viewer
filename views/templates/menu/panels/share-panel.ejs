@@ -33,8 +33,9 @@
   var vr = new Clipboard('#vr-copy', {
     text: function() {
       var matches = document.querySelector('#url').value
-                    .match(/(https?:\/\/[\w\d:]+)\/(.+)$/);
-      return matches ? matches[1] + '/vr/' + matches[2]: window.location.origin;
+                    .match(/(https:\/\/[\w\d-\.:]+)\/(.+)$/);
+      return matches ? matches[1] + '/vr/' + matches[2] :
+        window.location.origin + '/vr/';
     }
   });
 
