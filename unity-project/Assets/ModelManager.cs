@@ -56,6 +56,8 @@ public class ModelManager : MonoBehaviour {
 		if (gameObj == null) {
 			gameObj = Instantiate (prefab);
 			gameObj.name = id;
+			materialIdx++;
+			gameObj.GetComponent<MeshRenderer> ().material = materials [materialIdx%materials.Count];
 		}
 		return gameObj;
 	}
@@ -64,8 +66,6 @@ public class ModelManager : MonoBehaviour {
 	void AddGeometryToObject(GameObject newObj, JSONObject json) {
 		GeomParser g = newObj.GetComponent<GeomParser> ();
 		g.MakeGeometry (json);
-		materialIdx++;
-		g.GetComponent<MeshRenderer> ().material = materials [materialIdx%materials.Count];
 	}
 
 	// Sets the scale of all geometry loaded from this point forward.
