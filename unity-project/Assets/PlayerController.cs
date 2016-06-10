@@ -206,9 +206,7 @@ public class PlayerController : MonoBehaviour {
 
 	public void SetPosition(string pos) {
 		// Verify format before continuing. 
-		print("SetPosition");
 		if (!Regex.IsMatch(pos, @"\((-?\d+\.\d+),(-?\d+\.\d+),(-?\d+\.\d+)\)\((-?\d+\.\d+),(-?\d+\.\d+),(-?\d+\.\d+)\)")) return;
-		print ("Got through");
 		float[] matches = Regex.Matches(pos, @"-?\d+\.\d+")
 			.Cast<Match>()
 			.Select(m => float.Parse(m.Value))

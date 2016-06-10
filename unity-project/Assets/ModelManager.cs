@@ -15,6 +15,7 @@ public class ModelManager : MonoBehaviour {
 	public GameObject prefab;
 
 	public List<Material> materials;
+	public List<Material> transparentmaterials;
 
 	List<string> idList = new List<string> ();
 	List<string> bimDataList = new List<string>();

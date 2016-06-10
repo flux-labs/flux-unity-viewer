@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class GeomParser : MonoBehaviour {
 
@@ -13,6 +14,7 @@ public class GeomParser : MonoBehaviour {
 	List<Vector3> vertices = new List<Vector3>();
 	List<Vector2> uv = new List<Vector2> ();
 	List<int> triangles = new List<int>();
+	float opacity = 1;
 
 	static float smallestX;
 	static float smallestY;
@@ -70,12 +72,29 @@ public class GeomParser : MonoBehaviour {
 		gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
 		gameObject.GetComponent<MeshFilter> ().mesh = mesh;
 
-		// Flux flips X and Z. The first time geometry is loaded, the 
+		// Flux flips X and Z. 
 		if (!flippedXAndZ) {
 			flippedXAndZ = true;
 			transform.position = new Vector3 (0, 0, 0);
 			transform.eulerAngles = (new Vector3 (270, 0, 0));
 		}
+
+		if (opacity != 1) {
+			// Switch to the transparent version.
+			Material mat = gameObject.GetComponent<MeshRenderer> ().material;
+			ModelManager mm = GameObject.FindGameObjectWithTag ("flux").GetComponent<ModelManager> ();
+			for (int i = 0; i < mm.transparentmaterials.Count; i++) {
+				// You have to do this because the instantiated material adds the string " (Instance)" to the end.
+				Regex transparentMaterialName = new Regex (mm.transparentmaterials [i].name);
+				if (transparentMaterialName.IsMatch(mat.name)) {
+					gameObject.GetComponent<MeshRenderer> ().material = mm.transparentmaterials[i];
+				}
+			}
+
+
+
+		}
+
 	}
 
 	void RecursiveGeometryRecord(JSONObject unknownJson) {
@@ -87,65 +106,87 @@ public class GeomParser : MonoBehaviour {
 			bool itsAMesh = false;
 			int facesIdx = 0;
 			int verticesIdx = 0;
+
+			// If it's not a mesh, stop analyzing it.
 			for (int i = 0; i < unknownJson.keys.Count; i++) {
-				if (unknownJson.keys [i] == "vertices") {
-					verticesIdx = i;
-					itsAMesh = true;
-				} else if (unknownJson.keys [i] == "faces") {
-					facesIdx = i;
+				if (unknownJson.keys [i] == "primitive") {
+					if (unknownJson.list [i].str != "mesh") {
+						return;
+					}
 				}
 			}
 
-			if (itsAMesh) {
-				// We have to add the face # to the current total # of vertices.
-				JSONObject faces = unknownJson.list [facesIdx];
-				for (int z = 0; z < faces.list.Count; z++) {
-					JSONObject face = faces.list [z];
-
-					if ( face.list.Count == 3 ) {
-						triangles.Add ((int)face.list [0].n + vertices.Count);
-						triangles.Add ((int)face.list [1].n + vertices.Count);
-						triangles.Add ((int)face.list [2].n + vertices.Count);
-						// Do it again for the second side of the mesh
-						triangles.Add ((int)face.list [2].n + vertices.Count);
-						triangles.Add ((int)face.list [1].n + vertices.Count);
-						triangles.Add ((int)face.list [0].n + vertices.Count);
-					} else if ( face.list.Count > 3 ) {
-						for ( var j=0; j+2<face.list.Count; j++) {
-							triangles.Add ((int)face.list [0].n + vertices.Count);
-							triangles.Add ((int)face.list [j+1].n + vertices.Count);
-							triangles.Add ((int)face.list [j+2].n + vertices.Count);
-							// Do it again for the second side of the mesh
-							triangles.Add ((int)face.list [j+2].n + vertices.Count);
-							triangles.Add ((int)face.list [j+1].n + vertices.Count);
-							triangles.Add ((int)face.list [0].n + vertices.Count);
+			for (int i = 0; i < unknownJson.keys.Count; i++) {
+				if (unknownJson.keys [i] == "vertices") {
+					verticesIdx = i;
+				} else if (unknownJson.keys [i] == "faces") {
+					facesIdx = i;
+				} else if (unknownJson.keys [i] == "attributes") {
+					// Look for opacity.
+					// This is a simple algorithm that will just use
+					// the most recent opacity it's found.
+					JSONObject attributes = unknownJson.list [i];
+					for (int j = 0; j < attributes.keys.Count; j++) {
+						if (attributes.keys [j] == "materialProperties") {
+							JSONObject props = attributes.list [j];
+							for (int k = 0; k < props.keys.Count; k++) {
+								if (props.keys [k] == "opacity") {
+									if (props.list[k].n != 1) opacity = props.list [k].n;
+								}
+							}
 						}
 					}
+				}
+			}
 
-					for (int u = 0; u < face.list.Count; u++) {
-						triangles.Add ((int)face.list [u].n + vertices.Count);       
-					}
+			// We have to add the face # to the current total # of vertices.
+			JSONObject faces = unknownJson.list [facesIdx];
+			for (int z = 0; z < faces.list.Count; z++) {
+				JSONObject face = faces.list [z];
 
-					// if triangles isn't divisible by 3, add some padding.
-					for (int xy = 0; xy < triangles.Count % 3; xy++) {
-						triangles.Add (triangles[triangles.Count-1]);
+				if ( face.list.Count == 3 ) {
+					triangles.Add ((int)face.list [0].n + vertices.Count);
+					triangles.Add ((int)face.list [1].n + vertices.Count);
+					triangles.Add ((int)face.list [2].n + vertices.Count);
+					// Do it again for the second side of the mesh
+					triangles.Add ((int)face.list [2].n + vertices.Count);
+					triangles.Add ((int)face.list [1].n + vertices.Count);
+					triangles.Add ((int)face.list [0].n + vertices.Count);
+				} else if ( face.list.Count > 3 ) {
+					for ( var j=0; j+2<face.list.Count; j++) {
+						triangles.Add ((int)face.list [0].n + vertices.Count);
+						triangles.Add ((int)face.list [j+1].n + vertices.Count);
+						triangles.Add ((int)face.list [j+2].n + vertices.Count);
+						// Do it again for the second side of the mesh
+						triangles.Add ((int)face.list [j+2].n + vertices.Count);
+						triangles.Add ((int)face.list [j+1].n + vertices.Count);
+						triangles.Add ((int)face.list [0].n + vertices.Count);
 					}
 				}
 
-				JSONObject inspectedVertices = unknownJson.list [verticesIdx];
-				for (int i = 0; i < inspectedVertices.list.Count; i++) {
-					JSONObject vertex = inspectedVertices.list [i];
+				for (int u = 0; u < face.list.Count; u++) {
+					triangles.Add ((int)face.list [u].n + vertices.Count);       
+				}
+
+				// if triangles isn't divisible by 3, add some padding.
+				for (int xy = 0; xy < triangles.Count % 3; xy++) {
+					triangles.Add (triangles[triangles.Count-1]);
+				}
+			}
+
+			JSONObject inspectedVertices = unknownJson.list [verticesIdx];
+			for (int i = 0; i < inspectedVertices.list.Count; i++) {
+				JSONObject vertex = inspectedVertices.list [i];
 
 //					float multiplier = .06f;
 //					multiplier *= MaxSize;
 //						
-					// Y axis is flipped, for some reason.
-					vertices.Add (new Vector3 (
-						vertex.list [0].n - smallestX, 
-						(vertex.list [1].n - smallestY) * -1, 
-						vertex.list [2].n - smallestZ));
-				}       
-			}
+				// Y axis is flipped, for some reason.
+				vertices.Add (new Vector3 (
+					vertex.list [0].n - smallestX, 
+					(vertex.list [1].n - smallestY) * -1, 
+					vertex.list [2].n - smallestZ));
+			}       
 		}
 	}
 
