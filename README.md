@@ -14,8 +14,8 @@ github issues for bugs you find -- it's fun and it's free!
 
 Whether you're on mac, windows, or linux, the steps should be the same:
 
-    1. install node.js
-    2. run `npm install && npm start` inside this directory
+1. install node.js
+2. run `npm install && npm start` inside this directory
 
 ### Launching the unity project
 
