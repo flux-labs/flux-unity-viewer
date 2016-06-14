@@ -16,6 +16,7 @@ public class ModelManager : MonoBehaviour {
 
 	public List<Material> materials;
 	public List<Material> transparentmaterials;
+	public List<Material> brightmaterials;
 
 	List<string> idList = new List<string> ();
 	List<string> bimDataList = new List<string>();

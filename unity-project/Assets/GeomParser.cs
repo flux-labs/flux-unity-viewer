@@ -15,6 +15,9 @@ public class GeomParser : MonoBehaviour {
 	List<Vector2> uv = new List<Vector2> ();
 	List<int> triangles = new List<int>();
 	float opacity = 1;
+	int colorIndex = -1;
+	List<string> recognizedcolors = new List<string>() {"blue", "green", "indigo", "orange", 
+		"red", "yellow", "white", "brown", "lightblue", "lightgreen", "lightgrey"};
 
 	static float smallestX;
 	static float smallestY;
@@ -31,9 +34,9 @@ public class GeomParser : MonoBehaviour {
 		gameObject.GetComponent<MeshFilter> ().mesh = mesh;
 		mesh.Clear();
 
-		// Reset old values to prevent weird geometry from appearing
-		vertices.ForEach((Vector3 obj) => obj = new Vector3(0,0,0));
-		triangles.ForEach((int obj) => obj = 0);
+//		// Reset old values to prevent weird geometry from appearing
+//		vertices.ForEach((Vector3 obj) => obj = new Vector3(0,0,0));
+//		triangles.ForEach((int obj) => obj = 0);
 
 		vertices = new List<Vector3> (); 
 		triangles = new List<int> ();
@@ -79,10 +82,14 @@ public class GeomParser : MonoBehaviour {
 			transform.eulerAngles = (new Vector3 (270, 0, 0));
 		}
 
-		if (opacity != 1) {
+		ModelManager mm = GameObject.FindGameObjectWithTag ("flux").GetComponent<ModelManager> ();
+
+		if (colorIndex != -1) {
+			gameObject.GetComponent<MeshRenderer> ().material = (opacity != 1) ? 
+				mm.transparentmaterials[colorIndex] : mm.brightmaterials [colorIndex];			
+		} else if (opacity != 1) {
 			// Switch to the transparent version.
 			Material mat = gameObject.GetComponent<MeshRenderer> ().material;
-			ModelManager mm = GameObject.FindGameObjectWithTag ("flux").GetComponent<ModelManager> ();
 			for (int i = 0; i < mm.transparentmaterials.Count; i++) {
 				// You have to do this because the instantiated material adds the string " (Instance)" to the end.
 				Regex transparentMaterialName = new Regex (mm.transparentmaterials [i].name);
@@ -90,11 +97,7 @@ public class GeomParser : MonoBehaviour {
 					gameObject.GetComponent<MeshRenderer> ().material = mm.transparentmaterials[i];
 				}
 			}
-
-
-
 		}
-
 	}
 
 	void RecursiveGeometryRecord(JSONObject unknownJson) {
@@ -116,6 +119,8 @@ public class GeomParser : MonoBehaviour {
 				}
 			}
 
+			// Set the indexes of the keys for vertices and faces, 
+			// and looks inside the attributes object
 			for (int i = 0; i < unknownJson.keys.Count; i++) {
 				if (unknownJson.keys [i] == "vertices") {
 					verticesIdx = i;
@@ -125,15 +130,23 @@ public class GeomParser : MonoBehaviour {
 					// Look for opacity.
 					// This is a simple algorithm that will just use
 					// the most recent opacity it's found.
+					if (opacity != 1 && colorIndex > -1) continue;
 					JSONObject attributes = unknownJson.list [i];
 					for (int j = 0; j < attributes.keys.Count; j++) {
 						if (attributes.keys [j] == "materialProperties") {
 							JSONObject props = attributes.list [j];
 							for (int k = 0; k < props.keys.Count; k++) {
 								if (props.keys [k] == "opacity") {
-									if (props.list[k].n != 1) opacity = props.list [k].n;
+									if (props.list [k].n != 1) {
+										opacity = props.list [k].n;
+									}
+								} else if (props.keys [k] == "color") {
+									if (recognizedcolors.IndexOf(props.list [k].str) != -1) {
+										colorIndex = recognizedcolors.IndexOf (props.list [k].str);
+									}
 								}
 							}
+							break;
 						}
 					}
 				}
