@@ -12,11 +12,13 @@
   <div class="ui action input fluid">
     <input id="url" type="text">
     <button id="desktop-copy" data-clipboard-target="#url"
+            onclick="window.keyListModule.MakeKeyList()"
             class="ui right blue labeled icon button">
       <i class="copy icon"></i>
       Copy desktop link
     </button>
     <button id="vr-copy" data-clipboard-target="#url"
+            onclick="window.keyListModule.MakeKeyList()"
             class="ui right green labeled icon button">
       Copy VR link
       <i class="copy icon"></i>
@@ -31,11 +33,16 @@
 
   var desktop = new Clipboard('#desktop-copy');
   var vr = new Clipboard('#vr-copy', {
-    text: function() {
-      var matches = document.querySelector('#url').value
-                    .match(/(https:\/\/[\w\d-\.:]+)\/(.+)$/);
-      return matches ? matches[1] + '/vr/' + matches[2] :
+    text: function(element) {
+      if (document.querySelector('#url').value.match(/\/vr\//)) {
+        return !!document.querySelector('#url').value ?
+          document.querySelector('#url').value : window.location.origin;
+      } else {
+        var matches = document.querySelector('#url').value
+                      .match(/(https?:\/\/[\w\d-\.:]+)\/(.+)$/);
+        return matches ? matches[1] + '/vr/' + matches[2] :
         window.location.origin + '/vr/';
+      }
     }
   });
 
