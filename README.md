@@ -43,12 +43,10 @@ in views/ will automatically load your new version of the unity project.
 
 ##### Communication between Unity and the browser
 
-**Browser to unity**
-
+        Browser to unity
         SendMessage(gameobject, method, argument) 
 
-**Unity to browser**
-
+        Unity to browser
         Application.ExternalCall(method, argument); 
 
 ##### Logging into the flux sdk on localhost
