@@ -19,7 +19,9 @@ Whether you're on mac, windows, or linux, the steps should be the same:
 3. install node.js
 4. run `npm install && npm start` inside this directory
 
-### Launching the unity project
+### More tips
+
+##### Launching the unity project
 
 Install Unity, then open the "unity-project" folder as a project in unity.
 
@@ -29,17 +31,17 @@ webgl client, select: File > Build settings... and then click "Build." Select
 the "unity-build-target" folder, replacing the folder 'webgl.' The .ejs templates
 in views/ will automatically load your new version of the unity project.
 
-### Project structure
+##### Project structure
 
-  flux-data-selector: this is a submodule from github that implements the flux SDK.
-  node_modules: modules installed by the command `npm install`
-  public: some static public assets (images, stylesheets, etc.)
-  unity-build-target: when building (command+b) the unity project, build it into this folder,
+*  flux-data-selector: this is a submodule from github that implements the flux SDK.
+*  node_modules: modules installed by the command `npm install`
+*  public: some static public assets (images, stylesheets, etc.)
+*  unity-build-target: when building (command+b) the unity project, build it into this folder,
     replacing the webgl folder
-  unity-project: open this inside unity3d
-  views: this is where all the html template files live.
+*  unity-project: open this inside unity3d
+*  views: this is where all the html template files live.
 
-### Communication between Unity and the browser
+##### Communication between Unity and the browser
 
 **Browser to unity**
 
@@ -49,7 +51,7 @@ in views/ will automatically load your new version of the unity project.
 
         Application.ExternalCall(method, argument); 
 
-### Logging into the flux sdk on localhost
+##### Logging into the flux sdk on localhost
 1. Click + button
 2. Click 'use your own data'
 3. Click allow
