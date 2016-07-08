@@ -29,11 +29,6 @@ webgl client, select: File > Build settings... and then click "Build." Select
 the "unity-build-target" folder, replacing the folder 'webgl.' The .ejs templates
 in views/ will automatically load your new version of the unity project.
 
-### Project notes
-
-Flux employees: Please find the project notes here.
-https://docs.google.com/document/d/1zhflOlrxRYR-xru0biE-voybzLv_zLDCi_2gUcgNGks/edit#heading=h.zg4o77vrpkc4
-
 ### Project structure
 
   flux-data-selector: this is a submodule from github that implements the flux SDK.
@@ -46,6 +41,24 @@ https://docs.google.com/document/d/1zhflOlrxRYR-xru0biE-voybzLv_zLDCi_2gUcgNGks/
 
 ### Communication between Unity and the browser
 
-  Browser to unity: use SendMessage(gameobject, method, argument) to send information to unity.
-    Example: SendMessage("flux", "CreateGeometry", datakey.id + JSON.stringify(datakey.value));
-  Unity to browser: use Application.ExternalCall(method, argument); (global scope)
+**Browser to unity**
+
+        SendMessage(gameobject, method, argument) 
+
+**Unity to browser**
+
+        Application.ExternalCall(method, argument); 
+
+### Logging into the flux sdk on localhost
+1. Click + button
+2. Click 'use your own data'
+3. Click allow
+4. Copy everything starting from #access_token=
+5. Paste into localhost:8091 so it looks like: localhost:8091/#access_token=... (very long url)
+6. It will redirect to flux-unity.herokuapp.com. but go back to localhost:8091
+7. It works!
+
+### Project notes
+
+Flux employees: Please find the project notes here.
+https://docs.google.com/document/d/1zhflOlrxRYR-xru0biE-voybzLv_zLDCi_2gUcgNGks/edit#heading=h.zg4o77vrpkc4
